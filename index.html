@@ -1,1 +1,43 @@
-<!DOCTYPE html><html><body><h1>ROM Host</h1><p>Upload successful. Use the ROM link directly.</p></body></html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pokémon Ruby - Web GBA Emulator</title>
+  <style>
+    body {
+      background: #111;
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    #screen {
+      margin-top: 20px;
+      border: 4px solid #333;
+    }
+  </style>
+</head>
+<body>
+  <h1>Pokémon Ruby in Your Browser</h1>
+  <canvas id="screen" width="240" height="160"></canvas>
+  <script src="mgba.js"></script>
+  <script>
+    const Module = {
+      locateFile: function (filename) {
+        return filename;
+      },
+      onRuntimeInitialized: function () {
+        const canvas = document.getElementById("screen");
+        const instance = new mgba(canvas);
+
+        fetch("Pokemon-Ruby.gba")
+          .then((res) => res.arrayBuffer())
+          .then((data) => {
+            instance.setRom(new Uint8Array(data));
+            instance.run();
+          });
+      },
+    };
+  </script>
+</body>
+</html>
